@@ -88,7 +88,7 @@ void __fastcall Hooked::FrameStageNotify( void* ecx, void* edx, ClientFrameStage
 			static int prev_time = ( int )m_pGlobalVars->curtime;
 
 			if( prev_time != ( int )m_pGlobalVars->curtime ) {
-				fnClantagChanged( XorStr( "falschkopf" ), XorStr( "falschkopf" ) );
+				fnClantagChanged( XorStr( "kaaba downgrade" ), XorStr( "kaaba downgrade" ) );
 				prev_time = ( int )m_pGlobalVars->curtime;
 			}
 

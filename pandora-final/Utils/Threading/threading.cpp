@@ -70,7 +70,7 @@ void Threading::InitThreads( ) {
 	  InitThread( threads + i, i );
 
 #ifdef DEV
-   printf( XorStr( "%i threads initialized\n" ), numThreads );
+   //printf( XorStr( "%i threads initialized\n" ), numThreads );
 #endif
 }
 
