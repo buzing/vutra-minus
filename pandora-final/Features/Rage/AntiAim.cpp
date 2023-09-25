@@ -682,13 +682,13 @@ void AntiAim::HandleAntiAim( bool* bSendPacket, bool* bFinalTick, CUserCmd* pCmd
 			/*
 			pCmd->viewangles.y = m_flLastRealAngle + ( m_bLBYDirectionSwitch ? -105.f : 105.f );
 			m_bLBYDirectionSwitch = !m_bLBYDirectionSwitch;
-			*/
+			
 
 			pCmd->viewangles.y = m_flLastRealAngle + flBreakDelta;
 			if (!g_Vars.globals.m_bFakeWalking)
 			*bSendPacket = false;
 
-			m_bLBYDirectionSwitch = !m_bLBYDirectionSwitch;
+			m_bLBYDirectionSwitch = !m_bLBYDirectionSwitch;*/
 		}
 		else {
 			if( ( m_pGlobalVars->curtime + m_pGlobalVars->interval_per_tick ) > g_ServerAnimations.m_uServerAnimations.m_flLowerBodyRealignTimer ) {
