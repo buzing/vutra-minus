@@ -1,6 +1,5 @@
 /.vs
-/Debug
-/Release
-/output
 /Beta
 /Developer
+/Release
+/Stable
