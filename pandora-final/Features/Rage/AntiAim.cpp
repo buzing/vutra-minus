@@ -249,7 +249,7 @@ void AntiAim::HandleYaw( CUserCmd* pCmd ) {
 
 		// "Subtle edge -> Normal edge, slider not 0 activates some kind of jitter, the value confuses me idk what its doing"
 		if( g_Vars.rage.anti_aim_edge == 2 ) {
-			pCmd->viewangles.y += 90.f;
+			pCmd->viewangles.y += RandomFloat( -35.f, 35.f );
 		}
 
 		m_bEdging = true;
@@ -482,12 +482,12 @@ void AntiAim::HandleFreestand( CUserCmd* pCmd ) {
 			{
 				if (diff > 0) {
 					right++;
-					m_pDebugOverlay->AddLineOverlay(eye_position, eye_position + ((head_position - eye_position) * tr.fraction), 255, 0, 0, false, 2.f * m_pGlobalVars->interval_per_tick);
+					//m_pDebugOverlay->AddLineOverlay(eye_position, eye_position + ((head_position - eye_position) * tr.fraction), 255, 0, 0, false, 2.f * m_pGlobalVars->interval_per_tick);
 	
 				}
 				else {
 					left++;
-					m_pDebugOverlay->AddLineOverlay(eye_position, eye_position + ((head_position - eye_position) * tr.fraction), 0, 255, 0, false, 2.f * m_pGlobalVars->interval_per_tick);
+					//m_pDebugOverlay->AddLineOverlay(eye_position, eye_position + ((head_position - eye_position) * tr.fraction), 0, 255, 0, false, 2.f * m_pGlobalVars->interval_per_tick);
 				}
 			}
 		}
