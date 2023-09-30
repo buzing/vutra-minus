@@ -102,7 +102,7 @@ void AntiAim::HandlePitch( CUserCmd* pCmd ) {
 		pCmd->viewangles.x = -89.f;
 		break;
 	case 3:
-		pCmd->viewangles.x = 0.f;
+		pCmd->viewangles.x = 70.f;
 		break;
 	}
 }
@@ -653,9 +653,11 @@ void AntiAim::HandleAntiAim( bool* bSendPacket, bool* bFinalTick, CUserCmd* pCmd
 	else {
 		m_bJitterUpdate = !m_bJitterUpdate;
 
+		jitterrandom = RandomInt(-180.f, 180.f);
+
 		switch( g_Vars.rage.anti_aim_fake_type ) {
 		case 1: pCmd->viewangles.y = Math::AngleNormalize( m_flLastRealAngle + RandomFloat( -85.f, 85.f ) ); break;
-		case 2: /*local view*/ break;
+		case 2: pCmd->viewangles.y += Math::AngleNormalize(m_bJitterUpdate ? jitterrandom + 180.f : jitterrandom); break;
 		case 3: pCmd->viewangles.y += Math::AngleNormalize( m_flLastRealAngle + 180.f ); break;
 		}
 	}

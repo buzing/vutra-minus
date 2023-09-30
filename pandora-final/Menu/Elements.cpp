@@ -134,13 +134,13 @@ namespace Menu {
 				GUI::Group::SetNextSize( Vector2D( -1, 275 ) );
 				GUI::Group::BeginGroup( "Anti-aimbot", Vector2D( 50, 58 ) );
 				{
-					GUI::Controls::Dropdown( XorStr( "Pitch" ), { XorStr( "Off" ), XorStr( "Down" ), XorStr( "Up" ), XorStr( "Zero" ) }, &g_Vars.rage.anti_aim_base_pitch );
+					GUI::Controls::Dropdown( XorStr( "Pitch" ), { XorStr( "Off" ), XorStr( "Down" ), XorStr( "Up" ), XorStr( "Emotion" ) }, &g_Vars.rage.anti_aim_base_pitch );
 
 					GUI::Controls::Dropdown( XorStr( "Yaw" ), {
 						XorStr( "Off" ), XorStr( "180" ), XorStr( "180 Jitter" ), XorStr( "Jitter" ),
 						XorStr( "Spin" ), XorStr( "Sideways" ), XorStr( "Random" ), XorStr( "Static" ),
 						XorStr( "180 Z" ), }, &g_Vars.rage.anti_aim_yaw );
-					if( g_Vars.rage.anti_aim_yaw == 2 || g_Vars.rage.anti_aim_yaw == 3 ) {
+					if( g_Vars.rage.anti_aim_yaw == 2 || g_Vars.rage.anti_aim_yaw == 3 || g_Vars.rage.anti_aim_yaw == 6) {
 						GUI::Controls::Slider( XorStr( "##jitter distance" ), &g_Vars.rage.anti_aim_yaw_jitter, 0, 180.f, XorStr( "%.0f°" ), 1, true );
 					}
 					else if( g_Vars.rage.anti_aim_yaw == 4 ) {

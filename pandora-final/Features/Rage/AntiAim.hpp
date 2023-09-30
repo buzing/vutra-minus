@@ -48,6 +48,7 @@ class AntiAim {
 
 	bool m_bLBYDirectionSwitch;
 	bool m_bJitterUpdate;
+	int jitterrandom;
 
 	bool m_bEdging, m_bFreestanding;
 
