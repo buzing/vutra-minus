@@ -657,7 +657,7 @@ void AntiAim::HandleAntiAim( bool* bSendPacket, bool* bFinalTick, CUserCmd* pCmd
 
 		switch( g_Vars.rage.anti_aim_fake_type ) {
 		case 1: pCmd->viewangles.y = Math::AngleNormalize( m_flLastRealAngle + RandomFloat( -85.f, 85.f ) ); break;
-		case 2: pCmd->viewangles.y += Math::AngleNormalize(m_bJitterUpdate ? jitterrandom + 180.f : jitterrandom); break;
+		case 2: pCmd->viewangles.y += Math::AngleNormalize( jitterrandom); break;
 		case 3: pCmd->viewangles.y += Math::AngleNormalize( m_flLastRealAngle + 180.f ); break;
 		}
 	}
