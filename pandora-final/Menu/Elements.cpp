@@ -123,8 +123,8 @@ namespace Menu {
 					GUI::Controls::Dropdown( XorStr( "Prefer body aim" ), { XorStr( "Off" ), XorStr( "Fake angles" ), XorStr( "Always" ), XorStr( "Aggressive" ), XorStr( "High inaccuracy" ) }, &g_Vars.rage_default.prefer_body );
 					GUI::Controls::Hotkey( XorStr( "Prefer body aim key##key" ), &g_Vars.rage.force_baim );
 
-					//GUI::Controls::Label(XorStr("Double tap"));
-					//GUI::Controls::Hotkey(XorStr("Double tap key##key"), &g_Vars.rage.double_tap_bind);
+					GUI::Controls::Label(XorStr("Double tap"));
+					GUI::Controls::Hotkey(XorStr("Double tap key##key"), &g_Vars.rage.double_tap_bind);
 
 					GUI::Controls::Checkbox( XorStr( "Delay shot on unduck" ), &g_Vars.rage.delay_shot );
 				}

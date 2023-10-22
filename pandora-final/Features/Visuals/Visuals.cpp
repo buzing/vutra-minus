@@ -1278,6 +1278,12 @@ void Visuals::DrawWatermark( ) {
 		ind.text = XorStr( "LBY" );
 		indicators.push_back( ind );
 	}
+	if (g_Vars.rage.double_tap_bind.enabled) {
+		Indicator_t ind{ };
+		ind.color =  Color(255, 167, 234);
+		ind.text = XorStr("DT");
+		indicators.push_back(ind);
+	}
 
 	if( indicators.empty( ) )
 		return;

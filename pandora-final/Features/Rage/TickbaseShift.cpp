@@ -118,7 +118,7 @@ void TickbaseSystem::RunExploits( bool* bSendPacket, CUserCmd* pCmd ) {
 	}
 
 	if( pWeaponData->m_iWeaponType == WEAPONTYPE_C4 ||
-		/*pWeaponData->m_iWeaponType == WEAPONTYPE_KNIFE ||*/
+		pWeaponData->m_iWeaponType == WEAPONTYPE_KNIFE ||
 		pWeaponData->m_iWeaponType == WEAPONTYPE_GRENADE ) {
 		return;
 	}
@@ -164,18 +164,18 @@ void TickbaseSystem::RunExploits( bool* bSendPacket, CUserCmd* pCmd ) {
 		}
 	}
 
-	//if( pCmd->buttons & IN_ATTACK ) {
-	//	if( !m_bTapShot && !m_iShiftAmount && !m_bCMFix && pLocal->CanShoot( ) ) {
-	//		if( DoTheTapping( pCmd ) ) {
-	//			m_bCMFix = m_bTapShot = true;
-	//		}
+	if( pCmd->buttons & IN_ATTACK ) {
+		if( !m_bTapShot && !m_iShiftAmount && !m_bCMFix && pLocal->CanShoot( ) ) {
+			if( DoTheTapping( pCmd ) ) {
+				m_bCMFix = m_bTapShot = true;
+			}
 
-	//		//DoRegularShifting( 12 );
-	//	}
-	//}
-	//else {
-	//	m_bTapShot = false;
-	//}
+			DoRegularShifting( 14 );
+		}
+	}
+	else {
+		m_bTapShot = false;
+	}
 }
 
 void TickbaseSystem::DoRegularShifting( int iAmount ) {
@@ -255,7 +255,7 @@ bool TickbaseSystem::DoTheTapping( CUserCmd* pFrom ) {
 		pNewCommand->forwardmove = 0;
 		pNewCommand->sidemove = 0;
 
-		/*Vector vecVelocity = pLocal->m_vecVelocity( );
+		Vector vecVelocity = pLocal->m_vecVelocity( );
 		float flMaxSpeed = 250.0f;
 		auto pWeaponData = pWeapon->GetCSWeaponData( );
 		if( pWeaponData.IsValid( ) ) {
@@ -274,7 +274,7 @@ bool TickbaseSystem::DoTheTapping( CUserCmd* pFrom ) {
 				pNewCommand->sidemove = -450.0;
 			else
 				pNewCommand->sidemove = flMinSideMove;
-		}*/
+		}
 
 		pNewCommand->viewangles.Clamp( );
 
@@ -290,7 +290,7 @@ bool TickbaseSystem::DoTheTapping( CUserCmd* pFrom ) {
 	pLocal->m_nTickBase() = tickbase; 
 
 	// tell our controller how much to fix
-	//m_iFixAmount = m_iMaxProcessTicks;
+	m_iFixAmount = m_iMaxProcessTicks;
 
 	// tell createmove to setup stuff for fixing
 

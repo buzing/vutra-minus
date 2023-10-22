@@ -612,7 +612,7 @@ std::pair<bool, float> AntiAim::HandleEdge( ) {
 
 		if( flClosestWall < flClosestDistance ) {
 			flClosestDistance = flClosestWall;
-			flEdgeYaw = RAD2DEG( i );
+			flEdgeYaw = RAD2DEG(i);
 		}
 	}
 
