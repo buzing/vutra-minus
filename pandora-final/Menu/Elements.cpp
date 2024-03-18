@@ -22,10 +22,8 @@ namespace Menu {
 		std::string windowName = XorStr("pandora");
 #ifdef DEV
 		windowName = XorStr("pandora debug");
-#else
-#ifdef BETA_MODE
+#elif BETA_MODE
 		windowName = XorStr("pandora beta");
-#endif
 #endif
 		if (GUI::Form::BeginWindow(windowName) || GUI::ctx->setup) {
 			if (GUI::Form::BeginTab(0, XorStr("A")) || GUI::ctx->setup) {
@@ -142,21 +140,21 @@ namespace Menu {
 						XorStr("Spin"), XorStr("Sideways"), XorStr("Random"), XorStr("Static"),
 						XorStr("180 Z"), }, &g_Vars.rage.anti_aim_yaw);
 					if (g_Vars.rage.anti_aim_yaw == 2 || g_Vars.rage.anti_aim_yaw == 3 || g_Vars.rage.anti_aim_yaw == 6) {
-						GUI::Controls::Slider(XorStr("##jitter distance"), &g_Vars.rage.anti_aim_yaw_jitter, 0, 180.f, XorStr("%.0f°"), 1, true);
+						GUI::Controls::Slider(XorStr("##jitter distance"), &g_Vars.rage.anti_aim_yaw_jitter, 0, 180.f, XorStr("%.0fÂ°"), 1, true);
 					}
 					else if (g_Vars.rage.anti_aim_yaw == 4) {
 						GUI::Controls::Slider(XorStr("##spin speed"), &g_Vars.rage.anti_aim_yaw_spin_speed, 0, 10.f, XorStr("%.0f%%"), 1, true);
-						GUI::Controls::Slider(XorStr("##jitter distance"), &g_Vars.rage.anti_aim_yaw_spin_direction, -180.f, 180.f, XorStr("%.0f°"), 1, true);
+						GUI::Controls::Slider(XorStr("##jitter distance"), &g_Vars.rage.anti_aim_yaw_spin_direction, -180.f, 180.f, XorStr("%.0fÂ°"), 1, true);
 					}
 					else if (g_Vars.rage.anti_aim_yaw == 5 || g_Vars.rage.anti_aim_yaw == 7) {
-						GUI::Controls::Slider(XorStr("##additiveyaw"), &g_Vars.rage.anti_aim_base_yaw_additive, -180.f, 180.f, XorStr("%.0f°"), 1, true);
+						GUI::Controls::Slider(XorStr("##additiveyaw"), &g_Vars.rage.anti_aim_base_yaw_additive, -180.f, 180.f, XorStr("%.0fÂ°"), 1, true);
 					}
 
 					// idk what other yaws skeet had for running
 					GUI::Controls::Dropdown(XorStr("Yaw while running"), { XorStr("Off"), XorStr("180 Jitter") }, &g_Vars.rage.anti_aim_yaw_while_running);
 
 					GUI::Controls::Dropdown(XorStr("Fake yaw"), { XorStr("Off"), XorStr("Default"), XorStr("Local view"), XorStr("Opposite") }, &g_Vars.rage.anti_aim_fake_type);
-					//GUI::Controls::Slider( XorStr( "Fake yaw strength" ), &g_Vars.rage.anti_aim_fake_yaw_strength, -180.f, 180.f, XorStr( "%.0f°" ), 1, true );
+					//GUI::Controls::Slider( XorStr( "Fake yaw strength" ), &g_Vars.rage.anti_aim_fake_yaw_strength, -180.f, 180.f, XorStr( "%.0fÂ°" ), 1, true );
 
 					std::vector<MultiItem_t> freestanding_cond = {
 						{ XorStr("Default"), &g_Vars.rage.anti_aim_freestand_default },
@@ -165,11 +163,11 @@ namespace Menu {
 					};
 					GUI::Controls::MultiDropdown(XorStr("Freestanding"), freestanding_cond);
 					if (g_Vars.rage.anti_aim_freestand_default)
-						GUI::Controls::Slider(XorStr("##additivefreestand"), &g_Vars.rage.anti_aim_freestand_delta, 0, 180.f, XorStr("%.0f°"), 1, true);
+						GUI::Controls::Slider(XorStr("##additivefreestand"), &g_Vars.rage.anti_aim_freestand_delta, 0, 180.f, XorStr("%.0fÂ°"), 1, true);
 
 					GUI::Controls::Dropdown(XorStr("Edge"), { XorStr("Off"), XorStr("Static"), XorStr("Subtle") }, &g_Vars.rage.anti_aim_edge);
 					if (g_Vars.rage.anti_aim_edge > 0)
-						GUI::Controls::Slider(XorStr("##additiveedge"), &g_Vars.rage.anti_aim_edge_delta, 0, 180.f, XorStr("%.0f°"), 1, true);
+						GUI::Controls::Slider(XorStr("##additiveedge"), &g_Vars.rage.anti_aim_edge_delta, 0, 180.f, XorStr("%.0fÂ°"), 1, true);
 
 					GUI::Controls::Dropdown(XorStr("Yaw base"), { XorStr("Local view"), XorStr("At crosshair"), XorStr("At distance") }, &g_Vars.rage.anti_aim_base_yaw);
 
@@ -188,8 +186,8 @@ namespace Menu {
 					GUI::Controls::Checkbox(XorStr("Break walk animation"), &g_Vars.rage.anti_aim_break_walk);
 
 					//
-					//GUI::Controls::Slider( XorStr( "test1" ), &g_Vars.rage.test2, -180, 180.f, XorStr( "%.0f°" ), 1, true );
-					//GUI::Controls::Slider( XorStr( "test2" ), &g_Vars.rage.test3, -180, 180.f, XorStr( "%.0f°" ), 1, true );
+					//GUI::Controls::Slider( XorStr( "test1" ), &g_Vars.rage.test2, -180, 180.f, XorStr( "%.0fÂ°" ), 1, true );
+					//GUI::Controls::Slider( XorStr( "test2" ), &g_Vars.rage.test3, -180, 180.f, XorStr( "%.0fÂ°" ), 1, true );
 					//GUI::Controls::Hotkey( XorStr( "test3" ), &g_Vars.rage.test1 );
 				}
 				GUI::Group::EndGroup();
@@ -363,7 +361,7 @@ namespace Menu {
 			static bool on_cfg_load_gloves, on_cfg_load_knives;
 			if (GUI::Form::BeginTab(3, XorStr("D")) || GUI::ctx->setup) {
 				GUI::Group::BeginGroup(XorStr("Miscellaneous"), Vector2D(50, 100));
-				GUI::Controls::Slider(XorStr("Override FOV"), &g_Vars.esp.world_fov, 60.f, 140.f, XorStr("%.0f°"));
+				GUI::Controls::Slider(XorStr("Override FOV"), &g_Vars.esp.world_fov, 60.f, 140.f, XorStr("%.0fÂ°"));
 				GUI::Controls::Checkbox(XorStr("Bunny hop"), &g_Vars.misc.bunnyhop);
 				if (GUI::Controls::Checkbox(XorStr("Air strafe"), &g_Vars.misc.autostrafer)) {
 					GUI::Controls::Checkbox(XorStr("Movement keys"), &g_Vars.misc.autostrafer_wasd);
