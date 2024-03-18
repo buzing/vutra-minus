@@ -126,10 +126,10 @@ void CVariables::Create() {
 
 	zoom_sensitivity_ratio_mouse = m_pCvar->FindVar(XorStr("zoom_sensitivity_ratio_mouse"));
 
-	/*developer = m_pCvar->FindVar(XorStr("developer"));
-	con_enable = m_pCvar->FindVar( XorStr( "con_enable" ) );
-	con_filter_enable = m_pCvar->FindVar( XorStr( "con_filter_enable" ) );
-	con_filter_text = m_pCvar->FindVar( XorStr( "con_filter_text" ) );
-	con_filter_text_out = m_pCvar->FindVar( XorStr( "con_filter_text_out" ) );
-	contimes = m_pCvar->FindVar( XorStr( "contimes" ) );*/
+	developer = m_pCvar->FindVar(XorStr("developer"));
+	con_enable = m_pCvar->FindVar(XorStr("con_enable"));
+	con_filter_enable = m_pCvar->FindVar(XorStr("con_filter_enable"));
+	con_filter_text = m_pCvar->FindVar(XorStr("con_filter_text"));
+	con_filter_text_out = m_pCvar->FindVar(XorStr("con_filter_text_out"));
+	contimes = m_pCvar->FindVar(XorStr("contimes"));
 }

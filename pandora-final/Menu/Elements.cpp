@@ -75,12 +75,15 @@ namespace Menu {
 						};
 
 					GUI::Controls::Slider(XorStr("Minimum damage"), &g_Vars.rage_default.minimal_damage, 0, 125, GetDmgDisplay(g_Vars.rage_default.minimal_damage), 1, true);
+					GUI::Controls::Checkbox("Override minimum damage", &g_Vars.rage_default.minimal_damage_override);
+					GUI::Controls::Hotkey("Override minimum damage key", &g_Vars.rage_default.min_damage_override_key);
+					if (g_Vars.rage_default.minimal_damage_override)
+						GUI::Controls::Slider("##Minimum Damage Override", &g_Vars.rage_default.minimal_damage_override_value, 0, 100, "%d", 1, true);
 					GUI::Controls::Checkbox(XorStr("Override AWP"), &g_Vars.rage_default.override_awp);
 					GUI::Controls::Checkbox(XorStr("Automatic scope"), &g_Vars.rage_default.auto_scope);
 					GUI::Controls::Checkbox(XorStr("Quick peek assist"), &g_Vars.misc.autopeek);
 					GUI::Controls::Hotkey(XorStr("Quick peek assist key"), &g_Vars.misc.autopeek_bind);
 					GUI::Controls::Checkbox(XorStr("Reduce aim step"), &g_Vars.rage.aimstep);
-
 					GUI::Controls::Checkbox(XorStr("Log misses due to spread"), &g_Vars.esp.event_resolver);
 				}
 				GUI::Group::EndGroup();

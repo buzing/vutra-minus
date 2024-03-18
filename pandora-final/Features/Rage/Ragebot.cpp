@@ -265,8 +265,9 @@ int Ragebot::GetMinimalDamage(AimPoint_t* pPoint) {
 		return 1337420;
 
 	const int nPlayerHP = pPoint->m_pTarget->m_pEntity->m_iHealth();
+	bool bHasMinDmgOverride = m_AimbotInfo.m_pSettings->min_damage_override_key.enabled && m_AimbotInfo.m_pSettings->minimal_damage_override;
 	auto GetHPDamage = [&](int nDamage) {
-		return nDamage > 100 ? (nPlayerHP + (nDamage - 100)) : nDamage;
+		return bHasMinDmgOverride ? m_AimbotInfo.m_pSettings->minimal_damage_override_value : (nDamage > 100 ? (nPlayerHP + (nDamage - 100)) : nDamage);
 		};
 
 	bool bAutomatic = m_AimbotInfo.m_pSettings->minimal_damage == 0;
@@ -889,7 +890,7 @@ bool Ragebot::FinishAimbot() {
 
 	// by 6 missed shots due to spread we'll have upped the hitchance by 35
 	// increments by "5.83333333333" every missed spread shot 
-	flHitchance += 35.f * (float(g_Resolver.m_arrResolverData.at(bestPoint.m_pTarget->m_pEntity->EntIndex()).m_iMissedShotsSpread % 10) / 10.f);
+	// flHitchance += 35.f * (float(g_Resolver.m_arrResolverData.at(bestPoint.m_pTarget->m_pEntity->EntIndex()).m_iMissedShotsSpread % 10) / 10.f);
 
 	// scale the shit
 	flHitchance *= 0.01f;
@@ -1589,65 +1590,39 @@ void Ragebot::PostAimbot(AimPoint_t* pPoint) {
 
 		const int nHistoryTicks = TIME_TO_TICKS(pPoint->m_pTarget->m_pEntity->m_flSimulationTime() - pPoint->m_pTarget->m_pRecord->m_flSimulationTime);
 
-		//if( pPoint->m_pTarget->m_pRecord->m_pMatrix )
-		//	pPoint->m_pTarget->m_pEntity->DrawHitboxMatrix( pPoint->m_pTarget->m_pRecord->m_pMatrix, pPoint->m_pHitbox );
 
-#if 0
-		auto hdr = m_pModelInfo->GetStudiomodel(pPoint->m_pTarget->m_pEntity->GetModel());
-		if (hdr) {
-			auto hitboxSet = hdr->pHitboxSet(pPoint->m_pTarget->m_pEntity->m_nHitboxSet());
-			if (hitboxSet) {
-				for (int i = 0; i < hitboxSet->numhitboxes; ++i) {
-					auto hitbox = hitboxSet->pHitbox(i);
-					if (!hitbox)
-						continue;
+		ShotInformation_t shot;
+		shot.m_iPredictedDamage = pPoint->m_iDamage;
+		shot.m_flTime = m_pGlobalVars->realtime;
+		shot.m_iTargetIndex = pPoint->m_pTarget->m_pEntity->EntIndex();
+		shot.m_bTapShot = g_TickbaseController.m_bTapShot;
+		shot.m_vecStart = m_AimbotInfo.m_vecEyePosition;
+		shot.m_pHitbox = pPoint->m_pHitbox;
+		shot.m_pRecord = *pPoint->m_pTarget->m_pRecord;
+		shot.m_vecEnd = pPoint->m_vecPosition;
+		shot.m_bWasLBYFlick = pPoint->m_pTarget->m_pRecord->m_RecordFlags & ELagRecordFlags::RF_LBYFlicked;
+		shot.m_bHadPredError = nHistoryTicks < 0; // happened a few times, always had a pred error then
+		g_ShotHandling.RegisterShot(shot);
 
-					if (hitbox->m_flRadius <= 0.f)
-						continue;
+		std::string new_nick(info.szName); new_nick.resize(15);
 
-					auto min = hitbox->bbmin.Transform(pPoint->m_pTarget->m_pRecord->m_pMatrix[hitbox->bone]);
-					auto max = hitbox->bbmax.Transform(pPoint->m_pTarget->m_pRecord->m_pMatrix[hitbox->bone]);
+		C_AnimationLayer* layer_3 = &pPoint->m_pTarget->m_pEntity->m_AnimOverlay()[3];
+		if (layer_3) {
+			int layer_3_activity = pPoint->m_pTarget->m_pEntity->GetSequenceActivity(layer_3->m_nSequence);
 
-					m_pDebugOverlay->AddCapsuleOverlay(min, max, hitbox->m_flRadius, 255, 255, 255, 255,
-						m_pCvar->FindVar(XorStr("sv_showlagcompensation_duration"))->GetFloat());
-				}
-			}
+			// fired shot at name in hitbox (hitbox id), r:[choked ticks|backtrack_ticks|onshot='s' lbyflick ='lby' fakewalk='fw' nothing='?'|velocity]:[inair='air' duck='duck' neither='?']
+			m_pCvar->ConsoleColorPrintf(Color::White(), "Fired shot at %s in %s for %i dmg | R: [ %i | %i | %s | %.1f] : [%s] : [%i]\n",
+				new_nick.c_str(),
+				hitbox_to_string(pPoint->m_iHitbox).c_str(),
+				pPoint->m_iDamage,
+				pPoint->m_pTarget->m_pRecord->m_iLaggedTicks,
+				m_pGlobalVars->tickcount - TIME_TO_TICKS(pPoint->m_pTarget->m_pRecord->m_flSimulationTime),
+				(pPoint->m_pTarget->m_pRecord->m_RecordFlags & ELagRecordFlags::RF_Shot) != 0 ? "S" : (shot.m_bWasLBYFlick ? "LBY" : ((pPoint->m_pTarget->m_pRecord->m_RecordFlags & ELagRecordFlags::RF_FakeWalking) != 0 ? "FW" : "?")),
+				pPoint->m_pTarget->m_pRecord->m_vecVelocity.Length(),
+				(pPoint->m_pTarget->m_pRecord->m_iFlags & FL_ONGROUND) == 0 ? "AIR" : ((pPoint->m_pTarget->m_pRecord->m_iFlags & 6) != 0 ? "DUCK" : "?"),
+				layer_3_activity
+			);
 		}
-	}
-#endif
-	ShotInformation_t shot;
-	shot.m_iPredictedDamage = pPoint->m_iDamage;
-	shot.m_flTime = m_pGlobalVars->realtime;
-	shot.m_iTargetIndex = pPoint->m_pTarget->m_pEntity->EntIndex();
-	shot.m_bTapShot = g_TickbaseController.m_bTapShot;
-	shot.m_vecStart = m_AimbotInfo.m_vecEyePosition;
-	shot.m_pHitbox = pPoint->m_pHitbox;
-	shot.m_pRecord = *pPoint->m_pTarget->m_pRecord;
-	shot.m_vecEnd = pPoint->m_vecPosition;
-	shot.m_bWasLBYFlick = pPoint->m_pTarget->m_pRecord->m_RecordFlags & ELagRecordFlags::RF_LBYFlicked;
-	shot.m_bHadPredError = nHistoryTicks < 0; // happened a few times, always had a pred error then
-	g_ShotHandling.RegisterShot(shot);
-
-	std::string new_nick(info.szName); new_nick.resize(15);
-
-	C_AnimationLayer* layer_3 = &pPoint->m_pTarget->m_pEntity->m_AnimOverlay()[3];
-	if (layer_3) {
-		int layer_3_activity = pPoint->m_pTarget->m_pEntity->GetSequenceActivity(layer_3->m_nSequence);
-
-		// fired shot at name in hitbox (hitbox id), r:[choked ticks|backtrack_ticks|onshot='s' lbyflick ='lby' fakewalk='fw' nothing='?'|velocity]:[inair='air' duck='duck' neither='?']
-		m_pCvar->ConsoleColorPrintf(Color::White(), "Fired shot at %s in %s(%i) for %i dmg | R: [ %i | %i | %s | %.1f] : [%s] : [%i]\n",
-			new_nick.c_str(),
-			hitbox_to_string(pPoint->m_iHitbox).c_str(),
-			pPoint->m_iHitbox,
-			pPoint->m_iDamage,
-			pPoint->m_pTarget->m_pRecord->m_iLaggedTicks,
-			m_pGlobalVars->tickcount - TIME_TO_TICKS(pPoint->m_pTarget->m_pRecord->m_flSimulationTime),
-			(pPoint->m_pTarget->m_pRecord->m_RecordFlags & ELagRecordFlags::RF_Shot) != 0 ? "S" : (shot.m_bWasLBYFlick ? "LBY" : ((pPoint->m_pTarget->m_pRecord->m_RecordFlags & ELagRecordFlags::RF_FakeWalking) != 0 ? "FW" : "?")),
-			pPoint->m_pTarget->m_pRecord->m_vecVelocity.Length(),
-			(pPoint->m_pTarget->m_pRecord->m_iFlags & FL_ONGROUND) == 0 ? "AIR" : ((pPoint->m_pTarget->m_pRecord->m_iFlags & 6) != 0 ? "DUCK" : "?"),
-			layer_3_activity
-		);
-	}
 	}
 }
 

@@ -591,9 +591,10 @@ public:
 	config_option(float, pointscale, 55.f);
 
 	config_option(bool, override_awp, false);
-
 	config_option(int, minimal_damage, 30);
-	config_option(int, minimal_damage_override, 5);
+	config_option(bool, minimal_damage_override, false);
+	config_option(int, minimal_damage_override_value, 5);
+	config_keybind(min_damage_override_key);
 	config_option(bool, wall_penetration, false);
 	config_option(int, wall_penetration_damage, 20);
 

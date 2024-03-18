@@ -1288,6 +1288,20 @@ void Visuals::DrawWatermark() {
 		indicators.push_back(ind);
 	}
 
+	if (g_Vars.rage_default.min_damage_override_key.enabled) {
+		Indicator_t ind{ };
+		ind.color = Color::White();
+		ind.text = std::to_string(g_Vars.rage_default.minimal_damage_override_value);
+		indicators.push_back(ind);
+	}
+
+	if (g_Vars.rage.force_baim.enabled) {
+		Indicator_t ind{ };
+		ind.color = Color::White();
+		ind.text = "BODY";
+		indicators.push_back(ind);
+	}
+
 	if (indicators.empty())
 		return;
 

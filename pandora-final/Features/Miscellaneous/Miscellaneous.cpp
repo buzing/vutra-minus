@@ -227,6 +227,7 @@ void Miscellaneous::SkyBoxChanger() {
 	}
 }
 
+
 void Miscellaneous::PreserveKillfeed() {
 	auto local = C_CSPlayer::GetLocalPlayer();
 
@@ -262,9 +263,24 @@ void Miscellaneous::PreserveKillfeed() {
 			continue;
 		}
 
+		if (cur->set == 2.f) {
+			continue;
+		}
+
+		if (!bStatus) {
+			cur->set = 1.f;
+			return;
+		}
+
+		if (cur->set == 1.f) {
+			continue;
+		}
+
 		if (cur->m_flLifeTimeModifier == 1.5f) {
 			cur->m_flStartTime = g_Vars.esp.preserve_killfeed_time;
 		}
+
+		cur->set = 1.f;
 	}
 }
 
