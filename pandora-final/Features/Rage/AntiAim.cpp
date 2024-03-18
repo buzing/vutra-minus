@@ -496,7 +496,7 @@ void AntiAim::HandleFreestand(CUserCmd* pCmd) {
 	if (abs(left - right) > 1)
 	{
 		m_bFreestanding = true;
-		pCmd->viewangles.y = Math::AngleNormalize(pCmd->viewangles.y - (left > right ? -90.f : 90.f));
+		pCmd->viewangles.y = left > right ? -90 : 90;
 		return;
 	}
 
@@ -505,8 +505,8 @@ void AntiAim::HandleFreestand(CUserCmd* pCmd) {
 	// construct vector of angles to test.
 	std::vector< AdaptiveAngle > angles{ };
 	angles.emplace_back(g_Movement.m_vecOriginalCmdAngles.y - 180.f);
-	angles.emplace_back(g_Movement.m_vecOriginalCmdAngles.y + 90.f);
 	angles.emplace_back(g_Movement.m_vecOriginalCmdAngles.y - 90.f);
+	angles.emplace_back(g_Movement.m_vecOriginalCmdAngles.y + 90.f);
 
 	// start the trace at the enemy shoot pos.
 	auto start = player->GetAbsOrigin() + player->m_vecViewOffset();

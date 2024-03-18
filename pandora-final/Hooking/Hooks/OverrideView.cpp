@@ -33,8 +33,6 @@ void __fastcall Hooked::OverrideView(void* ECX, int EDX, CViewSetup* vsView) {
 	oOverrideView(ECX, vsView);
 
 	if (g_Vars.esp.remove_post_proccesing && bOk) {
-		if (local->m_bIsScoped()) {
-			//	vsView->m_iEdgeBlur = 0;
-		}
+		vsView->m_iEdgeBlur = 0;
 	}
 }

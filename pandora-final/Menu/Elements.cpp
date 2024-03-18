@@ -286,6 +286,8 @@ namespace Menu {
 
 					GUI::Controls::Checkbox(XorStr("Shadow"), &g_Vars.esp.chams_shadow);
 					GUI::Controls::ColorPicker(XorStr("Shadow color"), &g_Vars.esp.chams_shadow_color);
+
+					GUI::Controls::Checkbox("Disable model occlusion", &g_Vars.esp.skip_occulusion);
 				}
 				GUI::Group::EndGroup();
 				GUI::Group::PopLastSize();
@@ -371,7 +373,8 @@ namespace Menu {
 
 				GUI::Controls::Dropdown(XorStr("Air duck"), { XorStr("Off"), XorStr("Default") }, &g_Vars.misc.air_duck);
 				GUI::Controls::Checkbox(XorStr("Knifebot"), &g_Vars.misc.knifebot);
-				GUI::Controls::Checkbox(XorStr("Zeusbot"), &g_Vars.misc.zeus_bot);
+				if (GUI::Controls::Checkbox(XorStr("Zeusbot"), &g_Vars.misc.zeus_bot))
+					GUI::Controls::Slider("##Hitchance", &g_Vars.misc.zeus_bot_hitchance, 1, 100, "%.0f%%", 1);
 				GUI::Controls::Checkbox(XorStr("Quick stop"), &g_Vars.misc.quickstop);
 				GUI::Controls::Checkbox(XorStr("Automatic weapons"), &g_Vars.misc.auto_weapons);
 				GUI::Controls::Checkbox(XorStr("Jump at edge"), &g_Vars.misc.edge_jump);
@@ -390,16 +393,11 @@ namespace Menu {
 
 
 				if (GUI::Controls::Checkbox(XorStr("Persistent kill feed"), &g_Vars.esp.preserve_killfeed)) {
-					// note - alpha;
-					// maybe make a dropdown, with options such as:
-					// "extend", "preserve" where if u have extend 
-					// you can choose how long, and if u have preserve
-					// just force this to FLT_MAX or smth? idk.
-					g_Vars.esp.preserve_killfeed_time = 300.f;
+					GUI::Controls::Slider("##Time", &g_Vars.esp.preserve_killfeed_time, 1.f, 366.f, "%.0fs", 1, false);
 				}
 
 				/* GameEvents.cpp L: 318
-				GUI::Controls::Checkbox("Autobuy", &g_Vars.misc.autobuy_enabled);
+				// GUI::Controls::Checkbox("Autobuy", &g_Vars.misc.autobuy_enabled);
 				if (g_Vars.misc.autobuy_enabled) {
 					std::vector <MultiItem_t > vBuyItems{
 						{"Armor", &g_Vars.misc.autobuy_armor},

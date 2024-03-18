@@ -285,7 +285,8 @@ void Visuals::RenderSideInfo(const Box_t& box, C_CSPlayer* entity) {
 		vec_flags.emplace_back(XorStr("BLIND"), Color(0, 175, 255));
 
 	if (entity->m_bIsScoped())
-		vec_flags.emplace_back(XorStr("ZOOM"), Color(0, 175, 255));
+		if (entity->m_bIsScoped())
+			vec_flags.emplace_back(XorStr("ZOOM"), Color(0, 175, 255));
 
 	if (auto pLagData = g_LagCompensation.GetLagData(entity->m_entIndex); pLagData) {
 		if (pLagData->m_Records.size()) {

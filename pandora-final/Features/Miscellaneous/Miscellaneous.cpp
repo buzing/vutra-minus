@@ -220,6 +220,7 @@ void Miscellaneous::SkyBoxChanger() {
 		if (iOldSky != g_Vars.esp.brightness_adjustment) {
 			const char* sky_name = g_Vars.esp.brightness_adjustment == 1 ? "sky_csgo_night02" : sv_skyname->GetString();
 			fnLoadNamedSkys(sky_name);
+			g_Vars.r_3dsky->SetValueInt(0);
 
 			iOldSky = g_Vars.esp.brightness_adjustment;
 		}
@@ -261,24 +262,9 @@ void Miscellaneous::PreserveKillfeed() {
 			continue;
 		}
 
-		if (cur->set == 2.f) {
-			continue;
-		}
-
-		if (!bStatus) {
-			cur->set = 1.f;
-			return;
-		}
-
-		if (cur->set == 1.f) {
-			continue;
-		}
-
 		if (cur->m_flLifeTimeModifier == 1.5f) {
-			cur->m_flStartTime = FLT_MAX;
+			cur->m_flStartTime = g_Vars.esp.preserve_killfeed_time;
 		}
-
-		cur->set = 1.f;
 	}
 }
 
@@ -338,8 +324,8 @@ void Miscellaneous::RemoveSmoke() {
 	static bool* disable_post_process = *reinterpret_cast<bool**>(DisablePostProcess);
 
 	// set it.
-	//if( *disable_post_process != g_Vars.esp.remove_post_proccesing )
-	//	*disable_post_process = g_Vars.esp.remove_post_proccesing;
+	if (*disable_post_process != g_Vars.esp.remove_post_proccesing)
+		*disable_post_process = g_Vars.esp.remove_post_proccesing;
 
 	enum PostProcessParameterNames_t {
 		PPPN_FADE_TIME = 0,

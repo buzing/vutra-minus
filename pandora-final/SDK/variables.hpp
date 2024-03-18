@@ -661,13 +661,14 @@ public:
 	config_option(float, transparent_props, 100.f);
 
 	config_option(bool, preserve_killfeed, false);
+	config_option(int, perserve_killfeed_mode, 0);
 	config_option(float, preserve_killfeed_time, 1.0f);
 
 	config_option(bool, draw_bomb, false);
 	config_option(Color_f, draw_bomb_color, Color_f(1.0f, 1.0f, 1.0f, 1.0f));
 
 	config_option(bool, autowall_crosshair, false);
-	config_option(float, autowall_crosshair_height, 0.f);
+	config_option(int, autowall_crosshair_height, 0);
 
 	config_option(bool, skip_occulusion, false);
 
@@ -826,7 +827,7 @@ public:
 	config_option(bool, first_person_dead, false);
 	config_keybind(third_person_bind);
 
-	config_option(float, viewmodel_fov, 68.f);
+	config_option(float, vm_fov, 68.f);
 	config_option(bool, viewmodel_change, false);
 	config_option(float, viewmodel_x, 2.f);
 	config_option(float, viewmodel_y, 2.f);
