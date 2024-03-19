@@ -290,22 +290,6 @@ void Movement::PrePrediction(CUserCmd* cmd, bool* bSendPacket) {
 			InstantStop(cmd);
 	}
 
-	if (g_Vars.rage.anti_aim_break_walk
-		&& pLocal->m_hActiveWeapon() != -1
-		&& ((C_WeaponCSBaseGun*)pLocal->m_hActiveWeapon().Get())->IsGun() // mega shitcode
-		&& ((C_WeaponCSBaseGun*)pLocal->m_hActiveWeapon().Get())->m_iItemDefinitionIndex() != WEAPON_ZEUS // mega shitcode
-		// && m_pClientState->m_nChokedCommands() == 0
-		&& pLocal->m_fFlags() & FL_ONGROUND
-		&& !(cmd->buttons & IN_JUMP)
-		&& pLocal->m_vecVelocity().Length() >= 1.f
-		&& !(cmd->buttons & IN_ATTACK || cmd->buttons & IN_ATTACK2)
-		&& !g_Vars.rage.double_tap_bind.enabled
-		&& g_Vars.rage.fake_lag)
-	{
-		InstantStop(cmd);
-		cmd->buttons |= IN_DUCK;
-	}
-
 	g_Movement.FakeWalk(bSendPacket, cmd);
 	g_AntiAim.Prepare(bSendPacket, cmd);
 	g_AlternativeAttack.RunAttacks(bSendPacket, cmd);
@@ -316,7 +300,6 @@ void Movement::InPrediction(CUserCmd* cmd) {
 }
 
 void Movement::PostPrediction(CUserCmd* cmd) {
-
 	// fix movement after all movement code has ran
 	g_Movement.FixMovement(cmd, m_vecOriginalCmdAngles);
 }
@@ -463,22 +446,22 @@ void Movement::MovementControl(CUserCmd* cmd, float velocity) {
 	if (movement_speed > 28.f) {
 		if (movement_speed > velocity) {
 			float mov_speed = pLocal->m_vecVelocity().Length2D();
-			/*if( ( velocity + 1.0f ) <= mov_speed ) {
+			if ((velocity + 1.0f) <= mov_speed) {
 				cmd->forwardmove = 0.0f;
 				cmd->sidemove = 0.0f;
 			}
-			else {*/
-			float forward_ratio = cmd->forwardmove / movement_speed;
-			float side_ratio = cmd->sidemove / movement_speed;
+			else {
+				float forward_ratio = cmd->forwardmove / movement_speed;
+				float side_ratio = cmd->sidemove / movement_speed;
 
-			cmd->forwardmove = forward_ratio * std::min(movement_speed, velocity);
-			cmd->sidemove = side_ratio * std::min(movement_speed, velocity);
+				cmd->forwardmove = forward_ratio * std::min(movement_speed, velocity);
+				cmd->sidemove = side_ratio * std::min(movement_speed, velocity);
 
-			if (pLocal->m_fFlags() & 6) {
-				cmd->forwardmove = cmd->forwardmove / (((pLocal->m_flDuckAmount() * 0.34f) + 1.0f) - pLocal->m_flDuckAmount());
-				cmd->sidemove = cmd->sidemove / (((pLocal->m_flDuckAmount() * 0.34f) + 1.0f) - pLocal->m_flDuckAmount());
+				if (pLocal->m_fFlags() & 6) {
+					cmd->forwardmove = cmd->forwardmove / (((pLocal->m_flDuckAmount() * 0.34f) + 1.0f) - pLocal->m_flDuckAmount());
+					cmd->sidemove = cmd->sidemove / (((pLocal->m_flDuckAmount() * 0.34f) + 1.0f) - pLocal->m_flDuckAmount());
+				}
 			}
-			//}
 		}
 	}
 }

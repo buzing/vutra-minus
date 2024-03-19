@@ -22,7 +22,7 @@ void Miscellaneous::ThirdPerson() {
 	}
 
 	// reset this before doing anything
-	g_Misc.m_flThirdpersonTransparency = 1.f;
+	g_Misc.m_bMeetsTransparencyConditions = false;
 
 	// check if we have a local player and he is alive.
 	const bool bAlive = !pLocal->IsDead();
@@ -37,7 +37,7 @@ void Miscellaneous::ThirdPerson() {
 			return;
 
 		if (pWeaponData->m_iWeaponType == WEAPONTYPE_GRENADE || pLocal->m_bIsScoped()) {
-			g_Misc.m_flThirdpersonTransparency = 0.45f;
+			g_Misc.m_bMeetsTransparencyConditions = true;
 		}
 	}
 

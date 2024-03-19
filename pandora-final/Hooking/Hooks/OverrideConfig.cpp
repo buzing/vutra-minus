@@ -49,13 +49,13 @@ struct MaterialSystemConfig_t {
 	bool m_bMotionBlur;
 	bool m_bSupportFlashlight;
 	bool m_bPaintEnabled;
-	char pad[ 0xC ];
+	char pad[0xC];
 };
 
 
-bool __fastcall Hooked::OverrideConfig( IMaterialSystem* ecx, void* edx, MaterialSystemConfig_t& config, bool bForceUpdate ) {
-	g_Vars.globals.szLastHookCalled = XorStr( "44" );
-	if( ecx != nullptr ) {
+bool __fastcall Hooked::OverrideConfig(IMaterialSystem* ecx, void* edx, MaterialSystemConfig_t& config, bool bForceUpdate) {
+	g_Vars.globals.szLastHookCalled = XorStr("44");
+	if (ecx != nullptr) {
 
 		static bool bInit = false;
 		// don't allow 8x msaa antialiasing, because
@@ -64,10 +64,11 @@ bool __fastcall Hooked::OverrideConfig( IMaterialSystem* ecx, void* edx, Materia
 		//	config.m_nAASamples = 4;
 		//	bInit = true;
 		//}
-		
-		if( g_Vars.esp.brightness_adjustment == 2 )
+
+		if (g_Vars.esp.brightness_adjustment == 2) {
 			config.m_nFullbright = true;
+		}
 	}
 
-	return oOverrideConfig( ecx, config, bForceUpdate );
+	return oOverrideConfig(ecx, config, bForceUpdate);
 }

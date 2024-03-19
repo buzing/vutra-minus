@@ -188,8 +188,6 @@ namespace Menu {
 					GUI::Controls::Label(XorStr("Manual right"));
 					GUI::Controls::Hotkey(XorStr("Manual right key"), &g_Vars.rage.anti_aim_right_key);
 
-					GUI::Controls::Checkbox(XorStr("Break walk animation"), &g_Vars.rage.anti_aim_break_walk);
-
 					//
 					//GUI::Controls::Slider( XorStr( "test1" ), &g_Vars.rage.test2, -180, 180.f, XorStr( "%.0f°" ), 1, true );
 					//GUI::Controls::Slider( XorStr( "test2" ), &g_Vars.rage.test3, -180, 180.f, XorStr( "%.0f°" ), 1, true );
@@ -225,7 +223,8 @@ namespace Menu {
 						if (GUI::Controls::Checkbox(XorStr("Name ESP"), &visuals->name));
 						GUI::Controls::ColorPicker(XorStr("Name color"), &visuals->name_color);
 
-						if (GUI::Controls::Checkbox(XorStr("Flags"), &visuals->flags));
+						if (GUI::Controls::Checkbox(XorStr("Flags"), &visuals->flags))
+							GUI::Controls::Checkbox("Debug animation data", &visuals->debug_resolver_info);
 
 						if (GUI::Controls::Checkbox(XorStr("Weapon text"), &visuals->weapon));
 						GUI::Controls::Checkbox(XorStr("Weapon icon"), &visuals->weapon_icon);
@@ -284,13 +283,11 @@ namespace Menu {
 					GUI::Controls::Slider(XorStr("Shine"), &g_Vars.esp.chams_shine, 0.f, 100.f, XorStr("\n"));
 					GUI::Controls::Slider(XorStr("Rim"), &g_Vars.esp.chams_rim, 0.f, 100.f, XorStr("\n"));
 
-					GUI::Controls::Checkbox(XorStr("Show teammates"), &g_Vars.esp.chams_teammates);
-					GUI::Controls::ColorPicker(XorStr("Show teammates color"), &g_Vars.esp.chams_teammates_color);
+					GUI::Controls::Checkbox(XorStr("Local player"), &g_Vars.esp.chams_teammates);
+					GUI::Controls::ColorPicker(XorStr("color"), &g_Vars.esp.chams_teammates_color);
 
 					GUI::Controls::Checkbox(XorStr("Shadow"), &g_Vars.esp.chams_shadow);
 					GUI::Controls::ColorPicker(XorStr("Shadow color"), &g_Vars.esp.chams_shadow_color);
-
-					GUI::Controls::Checkbox("Disable model occlusion", &g_Vars.esp.skip_occulusion);
 				}
 				GUI::Group::EndGroup();
 				GUI::Group::PopLastSize();

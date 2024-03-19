@@ -4,6 +4,7 @@
 class Miscellaneous {
 public:
 	float m_flThirdpersonTransparency;
+	bool m_bMeetsTransparencyConditions;
 
 	void ThirdPerson();
 	void Modulation();

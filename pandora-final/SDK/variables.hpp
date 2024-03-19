@@ -654,7 +654,7 @@ public:
 	config_option(bool, remove_flash, false);
 	config_option(bool, remove_smoke, false);
 	config_option(bool, remove_fog, false);
-	config_option(bool, remove_sleeves, true);
+	config_option(bool, remove_sleeves, false);
 	config_option(bool, remove_hands, false);
 	config_option(bool, remove_bob, false);
 
@@ -766,6 +766,7 @@ public:
 	config_option(Color_f, name_color, Color_f(1.0f, 1.0f, 1.0f, 0.78431372549f));
 
 	config_option(bool, flags, false);
+	config_option(bool, debug_resolver_info, false);
 
 	config_option(bool, lby_timer, false);
 	config_option(Color_f, lby_timer_color, Color_f(1.0f, 0.f, 1.0f));

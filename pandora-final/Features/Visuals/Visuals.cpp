@@ -266,7 +266,6 @@ void Visuals::RenderBottomInfo(const Box_t& box, C_CSPlayer* entity) {
 void Visuals::RenderSideInfo(const Box_t& box, C_CSPlayer* entity) {
 	std::vector<std::pair<std::string, Color>> vec_flags{ };
 
-#if 1
 	if (g_Vars.visuals_enemy.money)
 		vec_flags.emplace_back(std::string(XorStr("$")).append(std::to_string(entity->m_iAccount())), Color(155, 210, 100));
 
@@ -311,26 +310,27 @@ void Visuals::RenderSideInfo(const Box_t& box, C_CSPlayer* entity) {
 		if (nItemDefinitionIndex == WEAPON_C4)
 			vec_flags.emplace_back(XorStr("B"), Color(255, 0, 0));
 	}
-#else
-	C_AnimationLayer* layer_6 = &entity->m_AnimOverlay()[6];
-	C_AnimationLayer* layer_3 = &entity->m_AnimOverlay()[3];
-	C_AnimationLayer* layer_12 = &entity->m_AnimOverlay()[12];
-	if (layer_6 && layer_3 && layer_12 && entity->m_PlayerAnimState()) {
-		int layer_3_activity = entity->GetSequenceActivity(layer_3->m_nSequence);
+	if (g_Vars.visuals_enemy.debug_resolver_info) {
+		C_AnimationLayer* layer_6 = &entity->m_AnimOverlay()[6];
+		C_AnimationLayer* layer_3 = &entity->m_AnimOverlay()[3];
+		C_AnimationLayer* layer_12 = &entity->m_AnimOverlay()[12];
+		if (layer_6 && layer_3 && layer_12 && entity->m_PlayerAnimState()) {
+			int layer_3_activity = entity->GetSequenceActivity(layer_3->m_nSequence);
 
-		vec_flags.emplace_back(std::string(XorStr("layer 3 act: ")).append(std::to_string(layer_3_activity)), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("layer 3 weight: ")).append(std::to_string(layer_3->m_flWeight)), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("layer 3 cycle: ")).append(std::to_string(layer_3->m_flCycle)), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("layer 6 weight: ")).append(std::to_string(layer_6->m_flWeight)), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("layer 6 cycle: ")).append(std::to_string(layer_6->m_flCycle)), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("layer 6 playback: ")).append(std::to_string(layer_6->m_flPlaybackRate)), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("layer 12 weight: ")).append(std::to_string(layer_12->m_flWeight)), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("choke: ")).append(std::to_string(TIME_TO_TICKS(entity->m_flSimulationTime() - entity->m_flOldSimulationTime()))), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("lby: ")).append(std::to_string(entity->m_flLowerBodyYawTarget())), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("velocity: ")).append(std::to_string(entity->m_PlayerAnimState()->m_flVelocityLengthXY)), Color(255, 255, 255));
-		vec_flags.emplace_back(std::string(XorStr("abs yaw delta: ")).append(std::to_string(Math::AngleDiff(entity->m_PlayerAnimState()->m_flEyeYaw, entity->m_PlayerAnimState()->m_flFootYaw))), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("layer 3 act: ")).append(std::to_string(layer_3_activity)), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("layer 3 weight: ")).append(std::to_string(layer_3->m_flWeight)), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("layer 3 cycle: ")).append(std::to_string(layer_3->m_flCycle)), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("layer 6 weight: ")).append(std::to_string(layer_6->m_flWeight)), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("layer 6 cycle: ")).append(std::to_string(layer_6->m_flCycle)), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("layer 6 playback: ")).append(std::to_string(layer_6->m_flPlaybackRate)), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("layer 12 weight: ")).append(std::to_string(layer_12->m_flWeight)), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("choke: ")).append(std::to_string(TIME_TO_TICKS(entity->m_flSimulationTime() - entity->m_flOldSimulationTime()))), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("lby: ")).append(std::to_string(entity->m_flLowerBodyYawTarget())), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("velocity: ")).append(std::to_string(entity->m_PlayerAnimState()->m_flVelocityLengthXY)), Color(255, 255, 255));
+			vec_flags.emplace_back(std::string(XorStr("abs yaw delta: ")).append(std::to_string(Math::AngleDiff(entity->m_PlayerAnimState()->m_flEyeYaw, entity->m_PlayerAnimState()->m_flFootYaw))), Color(255, 255, 255));
+		}
 	}
-#endif
+
 
 	int offset{ 0 };
 	for (auto flag : vec_flags) {
@@ -1288,7 +1288,7 @@ void Visuals::DrawWatermark() {
 		indicators.push_back(ind);
 	}
 
-	if (g_Vars.rage_default.min_damage_override_key.enabled) {
+	if (g_Vars.rage_default.min_damage_override_key.enabled && g_Vars.rage_default.minimal_damage_override) {
 		Indicator_t ind{ };
 		ind.color = Color::White();
 		ind.text = std::to_string(g_Vars.rage_default.minimal_damage_override_value);

@@ -195,32 +195,23 @@ bool Ragebot::AutoStop(Encrypted_t<CUserCmd> cmd) {
 
 	float maxSpeed = (pWeapon->GetMaxSpeed() * 0.33f) - 1.f;
 
-	if (g_Vars.rage.anti_aim_break_walk && m_pClientState->m_nChokedCommands() == 0 && !g_Vars.globals.m_bFakeWalking && !g_Vars.rage.double_tap_bind.enabled && g_Vars.rage.fake_lag)
-		maxSpeed *= 0.1f;
-
 	if (vecVelocityLength <= maxSpeed) {
 		g_Movement.MovementControl(m_AimbotInfo.m_pCmd, maxSpeed);
 	}
 	else {
-		if (vecVelocityLength > 15.f) {
-			QAngle angle;
-			Math::VectorAngles(vecVelocity * -1.f, angle);
+		QAngle angle;
+		Math::VectorAngles(vecVelocity * -1.f, angle);
 
-			// fix direction by factoring in where we are looking.
-			angle.y = g_Movement.m_vecOriginalCmdAngles.y - angle.y;
+		// fix direction by factoring in where we are looking.
+		angle.y = g_Movement.m_vecOriginalCmdAngles.y - angle.y;
 
-			Vector direction;
-			Math::AngleVectors(angle, direction);
+		Vector direction;
+		Math::AngleVectors(angle, direction);
 
-			auto stop = direction * vecVelocityLength;
+		auto stop = direction * vecVelocityLength;
 
-			cmd->forwardmove = stop.x;
-			cmd->sidemove = stop.y;
-		}
-		else {
-			cmd->forwardmove = 0.f;
-			cmd->sidemove = 0.f;
-		}
+		cmd->forwardmove = stop.x;
+		cmd->sidemove = stop.y;
 	}
 
 	m_AimbotInfo.m_bShouldStop = false;
@@ -669,7 +660,7 @@ bool Ragebot::RunHitscan(std::vector<Hitboxes> hitboxesToScan) {
 	}
 
 	return true;
-}
+	}
 
 bool Ragebot::FinishAimbot() {
 	// find best target
