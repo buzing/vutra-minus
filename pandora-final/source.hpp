@@ -12,30 +12,30 @@
 
 class IClientMode {
 public:
-   virtual ~IClientMode( ) { }
-   virtual int ClientModeCSNormal( void* ) = 0;
-   virtual void Init( ) = 0;
-   virtual void InitViewport( ) = 0;
-   virtual void Shutdown( ) = 0;
-   virtual void Enable( ) = 0;
-   virtual void Disable( ) = 0;
-   virtual void Layout( ) = 0;
-   virtual IPanel* GetViewport( ) = 0;
-   virtual void* GetViewportAnimationController( ) = 0;
-   virtual void ProcessInput( bool bActive ) = 0;
-   virtual bool ShouldDrawDetailObjects( ) = 0;
-   virtual bool ShouldDrawEntity( C_BaseEntity* pEnt ) = 0;
-   virtual bool ShouldDrawLocalPlayer( C_BaseEntity* pPlayer ) = 0;
-   virtual bool ShouldDrawParticles( ) = 0;
-   virtual bool ShouldDrawFog( void ) = 0;
-   virtual void OverrideView( CViewSetup* pSetup ) = 0;
-   virtual int KeyInput( int down, int keynum, const char* pszCurrentBinding ) = 0;
-   virtual void StartMessageMode( int iMessageModeType ) = 0;
-   virtual IPanel* GetMessagePanel( ) = 0;
-   virtual void OverrideMouseInput( float* x, float* y ) = 0;
-   virtual bool CreateMove( float flInputSampleTime, void* usercmd ) = 0;
-   virtual void LevelInit( const char* newmap ) = 0;
-   virtual void LevelShutdown( void ) = 0;
+	virtual ~IClientMode() { }
+	virtual int ClientModeCSNormal(void*) = 0;
+	virtual void Init() = 0;
+	virtual void InitViewport() = 0;
+	virtual void Shutdown() = 0;
+	virtual void Enable() = 0;
+	virtual void Disable() = 0;
+	virtual void Layout() = 0;
+	virtual IPanel* GetViewport() = 0;
+	virtual void* GetViewportAnimationController() = 0;
+	virtual void ProcessInput(bool bActive) = 0;
+	virtual bool ShouldDrawDetailObjects() = 0;
+	virtual bool ShouldDrawEntity(C_BaseEntity* pEnt) = 0;
+	virtual bool ShouldDrawLocalPlayer(C_BaseEntity* pPlayer) = 0;
+	virtual bool ShouldDrawParticles() = 0;
+	virtual bool ShouldDrawFog(void) = 0;
+	virtual void OverrideView(CViewSetup* pSetup) = 0;
+	virtual int KeyInput(int down, int keynum, const char* pszCurrentBinding) = 0;
+	virtual void StartMessageMode(int iMessageModeType) = 0;
+	virtual IPanel* GetMessagePanel() = 0;
+	virtual void OverrideMouseInput(float* x, float* y) = 0;
+	virtual bool CreateMove(float flInputSampleTime, void* usercmd) = 0;
+	virtual void LevelInit(const char* newmap) = 0;
+	virtual void LevelShutdown(void) = 0;
 };
 
 extern Encrypted_t<IBaseClientDLL> m_pClient;
@@ -83,6 +83,7 @@ extern Encrypted_t<CSPlayerResource*> m_pPlayerResource;
 extern Encrypted_t<IWeaponSystem> m_pWeaponSystem;
 extern Encrypted_t<SFHudDeathNoticeAndBotStatus> m_pDeathNotices;
 extern Encrypted_t<CHud> m_pHud;
+extern Encrypted_t<CEventInfo> m_pEvent;
 
 // netvar proxies
 extern RecvPropHook::Shared m_pDidSmokeEffectSwap;
@@ -94,19 +95,19 @@ extern RecvPropHook::Shared m_bNightVisionOnSwap;
 
 namespace Interfaces
 {
-   extern WNDPROC oldWindowProc;
-   extern HWND hWindow;
+	extern WNDPROC oldWindowProc;
+	extern HWND hWindow;
 
-   bool Create( void* reserved );
-   void Destroy( );
+	bool Create(void* reserved);
+	void Destroy();
 
-   void* CreateInterface( const std::string& image_name, const std::string& name );
+	void* CreateInterface(const std::string& image_name, const std::string& name);
 
 }
 
-__forceinline std::string GetDocumentsDirectory( ) {
-    char my_documents[ MAX_PATH ];
-    HRESULT result = SHGetFolderPath( NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, my_documents );
+__forceinline std::string GetDocumentsDirectory() {
+	char my_documents[MAX_PATH];
+	HRESULT result = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, my_documents);
 
-    return std::string( my_documents );
+	return std::string(my_documents);
 }

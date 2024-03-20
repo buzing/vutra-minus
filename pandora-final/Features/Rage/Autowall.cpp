@@ -223,14 +223,6 @@ void Autowall::ClipTraceToPlayer( const Vector vecAbsStart, const Vector& vecAbs
 	if( flRange < 0.0f || flRange > 60.0f )
 		return;
 
-#ifndef DEV
-	VIRTUALIZER_TIGER_WHITE_START
-	if( g_is_cracked ) {
-		pData->m_flCurrentDamage = 0.f;
-	}
-	VIRTUALIZER_TIGER_WHITE_END
-#endif
-
 	CGameTrace playerTrace;
 	m_pEngineTrace->ClipRayToEntity( Ray, iMask, pData->m_TargetPlayer, &playerTrace );
 	if( pData->m_EnterTrace.fraction > playerTrace.fraction )

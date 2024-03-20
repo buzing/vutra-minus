@@ -662,8 +662,7 @@ public:
 	config_option(float, transparent_props, 100.f);
 
 	config_option(bool, preserve_killfeed, false);
-	config_option(int, perserve_killfeed_mode, 0);
-	config_option(float, preserve_killfeed_time, 1.0f);
+	config_option(float, preserve_killfeed_time, 0.f);
 
 	config_option(bool, draw_bomb, false);
 	config_option(Color_f, draw_bomb_color, Color_f(1.0f, 1.0f, 1.0f, 1.0f));
@@ -872,7 +871,9 @@ public:
 
 	config_option(bool, anti_untrusted, true);
 
-	config_option(bool, enemy_chat_reveal, false);
+	config_option(bool, fake_latency, false);
+	config_keybind(fake_latency_bind);
+	config_option(float, fake_latency_amount, 200);
 
 	config_option(bool, autopeek, false);
 	config_option(bool, autopeek_visualise, false);

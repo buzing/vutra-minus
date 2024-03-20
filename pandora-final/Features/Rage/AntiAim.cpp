@@ -139,7 +139,7 @@ void AntiAim::HandleBaseYaws(CUserCmd* pCmd) {
 		pCmd->viewangles.y += g_Vars.rage.anti_aim_base_yaw_additive;
 		break;
 	case 6: // Random
-		pCmd->viewangles.y += RandomFloat(-360.f, 360.f);
+		pCmd->viewangles.y += 179.f + RandomFloat(-g_Vars.rage.anti_aim_base_yaw_additive, g_Vars.rage.anti_aim_base_yaw_additive);
 		break;
 	case 7: // Static
 		pCmd->viewangles.y = g_Vars.rage.anti_aim_base_yaw_additive;

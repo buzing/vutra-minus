@@ -111,7 +111,7 @@ namespace Menu {
 					GUI::Controls::Checkbox(XorStr("Remove spread"), &g_Vars.rage.remove_spread, true);
 					GUI::Controls::Checkbox(XorStr("Remove recoil"), &g_Vars.rage.remove_recoil);
 
-					GUI::Controls::Dropdown(XorStr("Accuracy boost"), { XorStr("Off"), XorStr("Low"), XorStr("Medium"), XorStr("High") }, &g_Vars.rage.accuracy_boost);
+					GUI::Controls::Dropdown(XorStr("Record selection"), { XorStr("Off"), XorStr("Priority"), XorStr("Medium"), XorStr("Full") }, &g_Vars.rage.accuracy_boost);
 
 					GUI::Controls::Dropdown(XorStr("Quick stop"), { XorStr("Off"), XorStr("On + slide"), XorStr("On + Duck") }, &g_Vars.rage_default.quick_stop);
 					GUI::Controls::Hotkey(XorStr("Quick stop key"), &g_Vars.rage_default.quick_stop_key);
@@ -395,6 +395,11 @@ namespace Menu {
 				if (GUI::Controls::Checkbox(XorStr("Persistent kill feed"), &g_Vars.esp.preserve_killfeed)) {
 					GUI::Controls::Slider("##Time", &g_Vars.esp.preserve_killfeed_time, 1.f, 366.f, "%.0fs", 1, false);
 				}
+
+				if (GUI::Controls::Checkbox("Fake latency", &g_Vars.misc.fake_latency))
+					GUI::Controls::Hotkey("##Fake latency key", &g_Vars.misc.fake_latency_bind);
+				if (g_Vars.misc.fake_latency)
+					GUI::Controls::Slider("##Fake latency amount", &g_Vars.misc.fake_latency_amount, 50, 1000, "%.0fms", 50, true);
 
 				/* GameEvents.cpp L: 318
 				// GUI::Controls::Checkbox("Autobuy", &g_Vars.misc.autobuy_enabled);

@@ -477,6 +477,10 @@ void Visuals::RenderNades(C_BaseEntity* entity) {
 			break;
 		}
 	}
+	else {
+		if (client_class->m_ClassID == CMolotovGrenade)
+			grenade = XorStr("FIRE");
+	}
 
 	Vector2D screen_position{ };
 	if (!Render::Engine::WorldToScreen(entity->GetAbsOrigin(), screen_position))
@@ -1299,6 +1303,13 @@ void Visuals::DrawWatermark() {
 		Indicator_t ind{ };
 		ind.color = Color::White();
 		ind.text = "BODY";
+		indicators.push_back(ind);
+	}
+
+	if (g_Vars.misc.fake_latency && g_Vars.misc.fake_latency_bind.enabled) {
+		Indicator_t ind{ };
+		ind.color = Color::White();
+		ind.text = "PING";
 		indicators.push_back(ind);
 	}
 

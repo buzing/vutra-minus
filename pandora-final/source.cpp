@@ -94,6 +94,7 @@ Encrypted_t<CSPlayerResource*> m_pPlayerResource = nullptr;
 Encrypted_t<IWeaponSystem> m_pWeaponSystem = nullptr;
 Encrypted_t<SFHudDeathNoticeAndBotStatus> m_pDeathNotices = nullptr;
 Encrypted_t<CHud> m_pHud = nullptr;
+Encrypted_t<CEventInfo> m_pEvent = nullptr;
 
 RecvPropHook::Shared m_pDidSmokeEffectSwap = nullptr;
 RecvPropHook::Shared m_bClientSideAnimationSwap = nullptr;
@@ -433,6 +434,7 @@ namespace Interfaces
 		g_Vars.mat_ambient_light_r->fnChangeCallback.m_Size = 0;
 		g_Vars.mat_ambient_light_g->fnChangeCallback.m_Size = 0;
 		g_Vars.mat_ambient_light_b->fnChangeCallback.m_Size = 0;
+		m_pCvar->FindVar("name")->fnChangeCallback.RemoveAll();
 
 		// disable extrapolation, i guess
 		g_Vars.cl_extrapolate->SetValue(0);
@@ -515,10 +517,10 @@ namespace Interfaces
 		Hooked::oC_BaseAnimating__DrawModel = Hooked::HooksManager.CreateHook<decltype(Hooked::oC_BaseAnimating__DrawModel) >(&Hooked::C_BaseAnimating__DrawModel, (void*)C_BaseAnimating__DrawModelAddr);
 
 		auto SendDatagramAddr = Memory::Scan(XorStr("engine.dll"), XorStr("55 8B EC 83 E4 F0 B8 ? ? ? ? E8 ? ? ? ? 56 57 8B F9 89 7C 24 18"));
-		// Hooked::oSendDatagram = Hooked::HooksManager.CreateHook<decltype( Hooked::oSendDatagram ) >( &Hooked::SendDatagram, ( void* )SendDatagramAddr );
+		Hooked::oSendDatagram = Hooked::HooksManager.CreateHook<decltype(Hooked::oSendDatagram) >(&Hooked::SendDatagram, (void*)SendDatagramAddr);
 
-		// auto ProcessPacketAddr = Memory::Scan( XorStr( "engine.dll" ), XorStr( "55 8B EC 83 E4 C0 81 EC ? ? ? ? 53 56 57 8B 7D 08 8B D9" ) );;
-		// Hooked::oProcessPacket = Hooked::HooksManager.CreateHook<decltype( Hooked::oProcessPacket ) >( &Hooked::ProcessPacket, ( void* )ProcessPacketAddr );
+		auto ProcessPacketAddr = Memory::Scan(XorStr("engine.dll"), XorStr("55 8B EC 83 E4 C0 81 EC ? ? ? ? 53 56 57 8B 7D 08 8B D9"));;
+		Hooked::oProcessPacket = Hooked::HooksManager.CreateHook<decltype(Hooked::oProcessPacket) >(&Hooked::ProcessPacket, (void*)ProcessPacketAddr);
 
 		Hooked::oModifyEyePosition = Hooked::HooksManager.CreateHook<decltype(Hooked::oModifyEyePosition) >(&Hooked::ModifyEyePosition, (void*)Engine::Displacement.Data.m_ModifyEyePos);
 

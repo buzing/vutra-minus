@@ -41,17 +41,17 @@ public:
 	Vector m_vecVelocity;
 	float m_flDuckAmount;
 
-	alignas( 16 ) matrix3x4_t m_pMatrix[ 128 ];
+	alignas(16) matrix3x4_t m_pMatrix[128];
 
-	void Setup( C_CSPlayer* player, bool isBackup = false );
-	void Apply( C_CSPlayer* player );
+	void Setup(C_CSPlayer* player, bool isBackup = false);
+	void Apply(C_CSPlayer* player);
 };
 
 class C_EntityLagData {
 public:
-	static void UpdateRecordData( C_EntityLagData* pThis, C_CSPlayer* player, const player_info_t& info );
+	static void UpdateRecordData(C_EntityLagData* pThis, C_CSPlayer* player, const player_info_t& info);
 
-	void Clear( );
+	void Clear();
 
 	std::deque<C_LagRecord> m_Records = { };
 	C_LagRecord backup_record = {};
@@ -63,16 +63,31 @@ public:
 	int m_iMissedShots = 0;
 };
 
+
+class CSequence {
+public:
+	float curtime;
+	int   inreliablestate;
+	int   sequencenr;
+
+public:
+	__forceinline CSequence() : curtime{}, inreliablestate{}, sequencenr{} {};
+	__forceinline CSequence(float time, int state, int seq) : curtime{ time }, inreliablestate{ state }, sequencenr{ seq } {};
+};
+
 class LagCompensation {
 public:
-	void Update( );
-	bool IsRecordOutOfBounds( const C_LagRecord& record, float target_time = 0.2f, int tickbase_shift = -1, bool tick_count_check = false );
-	float GetLerp( );
+	void Update();
+	bool IsRecordOutOfBounds(const C_LagRecord& record, float target_time = 0.2f, int tickbase_shift = -1, bool tick_count_check = false);
+	float GetLerp();
 	void SetupLerpTime();
+	void AddLatencyToNetchan(INetChannel* netchan, float Latency);
+	void UpdateIncomingSequences();
 
-	C_EntityLagData* GetLagData( int entindex );
+	std::deque<CSequence> m_pSequences;
+	C_EntityLagData* GetLagData(int entindex);
 
-	void ClearLagData( );
+	void ClearLagData();
 
 	void BackupOperation(bool restore = false);
 

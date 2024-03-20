@@ -409,9 +409,7 @@ std::vector<Hitboxes> Ragebot::GetHitboxes() {
 		}
 
 		if (m_AimbotInfo.m_pSettings->hitbox_chest) {
-			vecHitboxes.push_back(Hitboxes::HITBOX_UPPER_CHEST);
 			vecHitboxes.push_back(Hitboxes::HITBOX_CHEST);
-			vecHitboxes.push_back(Hitboxes::HITBOX_LOWER_CHEST);
 		}
 
 		if (m_AimbotInfo.m_pSettings->hitbox_head) {
@@ -590,8 +588,8 @@ bool Ragebot::RunHitscan(std::vector<Hitboxes> hitboxesToScan) {
 				RunAwall(&point);
 #endif
 			}
+			}
 		}
-	}
 
 #ifdef MT_AWALL
 	// finish queue (let threads run their jobs)
@@ -816,6 +814,13 @@ bool Ragebot::FinishAimbot() {
 
 				// we found a (better) body point which we can hit the center of
 				if (point.m_bBody && point.m_bCenter) {
+					bestPoint = point;
+					break;
+				}
+			}
+			if (!(bestTarget.m_pEntity->m_fFlags() & FL_ONGROUND))
+			{
+				if (point.m_bBody) {
 					bestPoint = point;
 					break;
 				}

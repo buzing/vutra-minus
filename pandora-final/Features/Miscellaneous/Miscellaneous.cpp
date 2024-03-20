@@ -162,7 +162,6 @@ void Miscellaneous::Modulation() {
 				w->ColorModulate(0.17f, 0.16f, 0.18f);
 
 			for (const auto& p : props) {
-				p->AlphaModulate(0.7f);
 				p->ColorModulate(0.5f, 0.5f, 0.5f);
 			}
 
@@ -179,7 +178,6 @@ void Miscellaneous::Modulation() {
 				w->ColorModulate(1.f, 1.f, 1.f);
 
 			for (const auto& p : props) {
-				p->AlphaModulate(1.f);
 				p->ColorModulate(1.f, 1.f, 1.f);
 			}
 		}
@@ -375,9 +373,6 @@ void Miscellaneous::RemoveSmoke() {
 }
 
 void Miscellaneous::RevealEnemyChat() {
-	if (g_Vars.cl_mute_enemy_team->GetBool() != g_Vars.misc.enemy_chat_reveal) {
-		g_Vars.cl_mute_enemy_team->SetValueInt(g_Vars.misc.enemy_chat_reveal ? 1 : 0);
-	}
 }
 
 void Miscellaneous::ForceCrosshair() {
