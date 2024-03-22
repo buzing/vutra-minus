@@ -388,9 +388,9 @@ std::vector<Hitboxes> Ragebot::GetHitboxes() {
 
 	if (g_Vars.rage.force_baim.enabled) {
 		if (m_AimbotInfo.m_pSettings->hitbox_chest) {
-			vecHitboxes.push_back(Hitboxes::HITBOX_UPPER_CHEST);
+			//  vecHitboxes.push_back(Hitboxes::HITBOX_UPPER_CHEST);
 			vecHitboxes.push_back(Hitboxes::HITBOX_CHEST);
-			vecHitboxes.push_back(Hitboxes::HITBOX_LOWER_CHEST);
+			//	vecHitboxes.push_back(Hitboxes::HITBOX_LOWER_CHEST);
 		}
 
 		// maybe stomach and pelvis one option?
@@ -426,8 +426,8 @@ std::vector<Hitboxes> Ragebot::GetHitboxes() {
 		}
 
 		if (m_AimbotInfo.m_pSettings->hitbox_arms) {
-			vecHitboxes.push_back(Hitboxes::HITBOX_LEFT_HAND);
-			vecHitboxes.push_back(Hitboxes::HITBOX_RIGHT_HAND);
+			// vecHitboxes.push_back(Hitboxes::HITBOX_LEFT_HAND);
+			// vecHitboxes.push_back(Hitboxes::HITBOX_RIGHT_HAND);
 
 			vecHitboxes.push_back(Hitboxes::HITBOX_LEFT_UPPER_ARM);
 			vecHitboxes.push_back(Hitboxes::HITBOX_RIGHT_UPPER_ARM);
@@ -588,8 +588,8 @@ bool Ragebot::RunHitscan(std::vector<Hitboxes> hitboxesToScan) {
 				RunAwall(&point);
 #endif
 			}
-			}
 		}
+	}
 
 #ifdef MT_AWALL
 	// finish queue (let threads run their jobs)
@@ -607,8 +607,8 @@ bool Ragebot::RunHitscan(std::vector<Hitboxes> hitboxesToScan) {
 				continue;
 
 			// suddenly we did not hit head
-			//if( point.m_pHitbox->group == Hitgroup_Head && point.m_pFireBulletData->m_iHitgroup != Hitgroup_Head )
-			//	continue;
+			if (point.m_pHitbox->group == Hitgroup_Head && point.m_pFireBulletData->m_iHitgroup != Hitgroup_Head)
+				continue;
 
 			if (point.m_pHitbox->group != point.m_pFireBulletData->m_iHitgroup)
 				continue;
@@ -658,7 +658,7 @@ bool Ragebot::RunHitscan(std::vector<Hitboxes> hitboxesToScan) {
 	}
 
 	return true;
-	}
+}
 
 bool Ragebot::FinishAimbot() {
 	// find best target
@@ -711,7 +711,7 @@ bool Ragebot::FinishAimbot() {
 	AimPoint_t bestPoint{ };
 	bestPoint.m_bFirstPoint = true;
 
-	float flMaxBodyDamage = Autowall::ScaleDamage(bestTarget.m_pEntity, m_AimbotInfo.m_pWeaponInfo->m_iWeaponDamage, m_AimbotInfo.m_pWeaponInfo->m_flArmorRatio, Hitgroup_Stomach);
+	float flMaxBodyDamage = Autowall::ScaleDamage(bestTarget.m_pEntity, m_AimbotInfo.m_pWeaponInfo->m_iWeaponDamage, m_AimbotInfo.m_pWeaponInfo->m_flArmorRatio, Hitgroup_Stomach && Hitgroup_Chest);
 
 	// main aimbot logic (prefer body, safepoint, etc.)
 	for (auto& point : bestTarget.m_vecAimPoints) {
@@ -863,9 +863,9 @@ bool Ragebot::FinishAimbot() {
 
 	bool noAimbot = !m_AimbotInfo.m_pLocal->CanShoot() || g_Vars.globals.m_bShotWhileChoking;
 	if (noAimbot) {
-		/*if( bBetweenShots && TICKS_TO_TIME( m_AimbotInfo.m_pLocal->m_nTickBase( ) ) >= m_AimbotInfo.m_pLocal->m_flNextAttack( ) ) {
-			AutoStop( true );
-		}*/
+		if (bBetweenShots && TICKS_TO_TIME(m_AimbotInfo.m_pLocal->m_nTickBase()) >= m_AimbotInfo.m_pLocal->m_flNextAttack()) {
+			AutoStop(m_AimbotInfo.m_pCmd);
+		}
 
 		g_Visuals.AddDebugMessage(std::string(XorStr(__FUNCTION__)).append(XorStr(" -> L") + std::to_string(__LINE__)));
 		return false;
@@ -877,7 +877,7 @@ bool Ragebot::FinishAimbot() {
 	}
 
 	// always stop in the current tick
-	//AutoStop( );
+	// AutoStop( );
 	m_AimbotInfo.m_bShouldStop = true;
 	AutoScope();
 
@@ -886,8 +886,9 @@ bool Ragebot::FinishAimbot() {
 
 	// by 6 missed shots due to spread we'll have upped the hitchance by 35
 	// increments by "5.83333333333" every missed spread shot 
-	// flHitchance += 35.f * (float(g_Resolver.m_arrResolverData.at(bestPoint.m_pTarget->m_pEntity->EntIndex()).m_iMissedShotsSpread % 10) / 10.f);
-
+	float flIncrementHitchance{};
+	flIncrementHitchance += 35.f * (float(g_Resolver.m_arrResolverData.at(bestPoint.m_pTarget->m_pEntity->EntIndex()).m_iMissedShotsSpread % 10) / 10.f);
+	flHitchance += flIncrementHitchance;
 	// scale the shit
 	flHitchance *= 0.01f;
 
@@ -929,7 +930,7 @@ bool Ragebot::RunHitchance(AimPoint_t* pPoint, float chance) {
 		|| !pPoint->m_pTarget->m_pRecord->player)
 		return false;
 
-	//if( ( m_AimbotInfo.m_vecEyePosition - pPoint->m_vecPosition ).Length( ) > m_AimbotInfo.m_pWeaponInfo->m_flWeaponRange )
+	// if( ( m_AimbotInfo.m_vecEyePosition - pPoint->m_vecPosition ).Length( ) > m_AimbotInfo.m_pWeaponInfo->m_flWeaponRange )
 	//	return false;
 
 	Vector forward = pPoint->m_vecPosition - m_AimbotInfo.m_vecEyePosition;
@@ -1121,7 +1122,7 @@ bool Ragebot::RunHitchance(AimPoint_t* pPoint, float chance) {
 		return scaledHits >= chance;
 	}
 
-	return false;//calculatedHitchance >= chance;
+	return false;
 }
 
 std::vector<C_CSPlayer*> Ragebot::FindTargets() {

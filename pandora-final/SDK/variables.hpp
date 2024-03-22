@@ -528,6 +528,9 @@ public:
 
 	config_option(int, anti_aim_fake_type, 0);
 
+	config_option(bool, anti_aim_fake_body, false);
+	config_option(float, anti_aim_fake_body_delta, 105.f);
+
 	config_keybind(anti_aim_left_key);
 	config_keybind(anti_aim_right_key);
 	config_keybind(anti_aim_back_key);
@@ -753,6 +756,7 @@ public:
 	group_begin(PLAYER_VISUALS);
 
 	config_option(bool, teammates, false);
+	config_option(bool, local_player, false);
 
 	config_option(bool, box, false);
 	config_option(Color_f, box_color, Color_f(1.0f, 1.0f, 1.0f, 0.50980392156f));

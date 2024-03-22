@@ -176,6 +176,10 @@ namespace Menu {
 
 					GUI::Controls::Dropdown(XorStr("Yaw base"), { XorStr("Local view"), XorStr("At crosshair"), XorStr("At distance") }, &g_Vars.rage.anti_aim_base_yaw);
 
+
+					if (GUI::Controls::Checkbox("Fake body", &g_Vars.rage.anti_aim_fake_body))
+						GUI::Controls::Slider("##breakdelta", &g_Vars.rage.anti_aim_fake_body_delta, 0.f, 180.f, "%.0f°", 1, true);
+
 					GUI::Controls::Checkbox(XorStr("Crooked"), &g_Vars.rage.anti_aim_crooked);
 					GUI::Controls::Checkbox(XorStr("Twist"), &g_Vars.rage.anti_aim_twist);
 
@@ -209,6 +213,8 @@ namespace Menu {
 
 					if (visuals) {
 						if (GUI::Controls::Checkbox(XorStr("Teammates"), &visuals->teammates));
+
+						GUI::Controls::Checkbox("Local", &visuals->local_player);
 
 						if (GUI::Controls::Checkbox(XorStr("Dormant"), &visuals->dormant));
 
@@ -384,6 +390,7 @@ namespace Menu {
 				if (g_Vars.misc.fakewalk) {
 					GUI::Controls::Slider(XorStr("##Slow motion speed"), &g_Vars.misc.slow_motion_speed, 0.f, 100.f, XorStr("%.0f%%"));
 				}
+				GUI::Controls::Checkbox("Infinite stamina", &g_Vars.misc.fastduck);
 				GUI::Controls::Checkbox(XorStr("Reveal competitive ranks"), &g_Vars.misc.reveal_ranks);
 				GUI::Controls::Checkbox(XorStr("Auto-accept matchmaking"), &g_Vars.misc.auto_accept);
 				GUI::Controls::Checkbox(XorStr("Clantag spammer"), &g_Vars.misc.clantag_changer);

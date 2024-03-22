@@ -139,7 +139,7 @@ void AntiAim::HandleBaseYaws(CUserCmd* pCmd) {
 		pCmd->viewangles.y += g_Vars.rage.anti_aim_base_yaw_additive;
 		break;
 	case 6: // Random
-		pCmd->viewangles.y += 179.f + RandomFloat(-g_Vars.rage.anti_aim_base_yaw_additive, g_Vars.rage.anti_aim_base_yaw_additive);
+		pCmd->viewangles.y += 179.f + RandomFloat(-g_Vars.rage.anti_aim_yaw_jitter, g_Vars.rage.anti_aim_yaw_jitter);
 		break;
 	case 7: // Static
 		pCmd->viewangles.y = g_Vars.rage.anti_aim_base_yaw_additive;
@@ -658,22 +658,22 @@ void AntiAim::HandleAntiAim(bool* bSendPacket, bool* bFinalTick, CUserCmd* pCmd)
 		switch (g_Vars.rage.anti_aim_fake_type) {
 		case 1: pCmd->viewangles.y = Math::AngleNormalize(m_flLastRealAngle + RandomFloat(-85.f, 85.f)); break;
 		case 2: pCmd->viewangles.y += Math::AngleNormalize(jitterrandom); break;
-		case 3: pCmd->viewangles.y += Math::AngleNormalize(m_flLastRealAngle + 180.f); break;
+		case 3: pCmd->viewangles.y += Math::AngleNormalize(m_flLastRealAngle + 45.f); break;
 		}
 	}
 
 	if (!m_pClientState->m_nChokedCommands()
-		&& g_Vars.rage.anti_aim_fake_type > 0
+		&& g_Vars.rage.anti_aim_fake_body
 		&& (pLocal->m_fFlags() & FL_ONGROUND) != 0
-		&& abs(m_pGlobalVars->curtime - g_ServerAnimations.m_uServerAnimations.m_flLowerBodyRealignTimer) < 1.1f
+		&& abs(m_pGlobalVars->curtime - g_ServerAnimations.m_uServerAnimations.m_flLowerBodyRealignTimer) < 1.35f
 		&& pLocal->m_PlayerAnimState()->m_flVelocityLengthXY < 0.1f)
 	{
 		RandomSeed(m_pGlobalVars->tickcount);
-		float flLbyDelta = RandomFloat(105.f, 118.f);
+		float flLbyDelta = g_Vars.rage.anti_aim_fake_body_delta;
 		float flBreakDelta = (m_bLBYDirectionSwitch ? -flLbyDelta : flLbyDelta);
 
 		if (m_bEdging) {
-			flBreakDelta = g_Vars.rage.anti_aim_edge_delta;
+			flBreakDelta = g_Vars.rage.anti_aim_fake_body_delta;
 		}
 
 		if (m_bFreestanding) {
@@ -697,5 +697,5 @@ void AntiAim::HandleAntiAim(bool* bSendPacket, bool* bFinalTick, CUserCmd* pCmd)
 	}
 
 
-	pCmd->viewangles.y = Math::AngleNormalize(pCmd->viewangles.y);
+	// pCmd->viewangles.y = Math::AngleNormalize(pCmd->viewangles.y);
 }

@@ -52,7 +52,7 @@ bool Visuals::IsValidPlayer(C_CSPlayer* entity) {
 		return false;
 
 	if (entity->EntIndex() == m_pEngine->GetLocalPlayer())
-		return false;
+		return g_Vars.visuals_enemy.local_player;
 
 	if (entity->IsTeammate(pLocal))
 		return g_Vars.visuals_enemy.teammates;
@@ -115,8 +115,9 @@ void Visuals::RenderHealth(const Box_t& box, C_CSPlayer* entity) {
 		// either sprintf here, or add some nice formatting library
 		// std::to_string is slow, could kill some frames when multiple people are being rendered
 		// this could also be apparent on a much larger scale on lower-end pcs
-
-		Render::Engine::esp_pixel.string(box.x - 5, box.y + (box.h - bar_size) - 7, Color(255, 255, 255, 180 * player_fading_alpha.at(entity->EntIndex())), std::to_string(entity->m_iHealth()), Render::Engine::ALIGN_CENTER);
+		std::stringstream hpstring;
+		hpstring << std::to_string(entity->m_iHealth());
+		Render::Engine::esp_pixel.stringstream(box.x - 5, box.y + (box.h - bar_size) - 7, Color(255, 255, 255, 180 * player_fading_alpha.at(entity->EntIndex())), hpstring, Render::Engine::ALIGN_CENTER);
 	}
 }
 
@@ -746,6 +747,17 @@ void Visuals::RenderArrows(C_BaseEntity* entity) {
 	}
 }
 
+enum EObserverModes
+{
+	OBS_MODE_NONE = 0,        // not in spectator mode
+	OBS_MODE_DEATHCAM,        // special mode for death cam animation
+	OBS_MODE_FREEZECAM,        // zooms to a target, and freeze-frames on them
+	OBS_MODE_FIXED,            // view from a fixed camera position
+	OBS_MODE_FIRSTPERSON,    // follow a player in first person view
+	OBS_MODE_THIRDPERSON,    // follow a player in third person view
+	OBS_MODE_ROAMING,        // free roaming
+};
+
 void Visuals::Spectators() {
 	std::vector< std::string > spectators{ };
 	C_CSPlayer* pLocal = C_CSPlayer::GetLocalPlayer();
@@ -770,6 +782,33 @@ void Visuals::Spectators() {
 			if (!m_pEngine->GetPlayerInfo(i, &info))
 				continue;
 
+			std::string szObserverMode;
+			switch (player->m_iObserverMode()) {
+			case OBS_MODE_NONE:
+				break;
+			case OBS_MODE_DEATHCAM:
+				szObserverMode = "Deathcam << ";
+				break;
+			case OBS_MODE_FREEZECAM:
+				szObserverMode = "Freezecam << ";
+				break;
+			case OBS_MODE_FIXED:
+				szObserverMode = "Fixedcam << ";
+				break;
+			case OBS_MODE_FIRSTPERSON:
+				szObserverMode = "1st << ";
+				break;
+			case OBS_MODE_THIRDPERSON:
+				szObserverMode = "3rd << ";
+				break;
+			case OBS_MODE_ROAMING:
+				szObserverMode = "Roamingcam << ";
+				break;
+			}
+
+			std::stringstream final_string;
+			final_string << szObserverMode << info.szName;
+
 			if (pLocal->IsDead()) {
 				auto observer = player->m_hObserverTarget();
 				if (local_observer.IsValid() && observer.IsValid()) {
@@ -777,7 +816,7 @@ void Visuals::Spectators() {
 					auto target = reinterpret_cast<C_CSPlayer*>(m_pEntList->GetClientEntityFromHandle(observer));
 
 					if (target == spec && spec) {
-						spectators.push_back(std::string(info.szName).substr(0, 24));
+						spectators.push_back(final_string.str());
 					}
 				}
 			}
@@ -785,7 +824,7 @@ void Visuals::Spectators() {
 				if (player->m_hObserverTarget() != pLocal)
 					continue;
 
-				spectators.push_back(std::string(info.szName).substr(0, 24));
+				spectators.push_back(final_string.str());
 			}
 		}
 	}

@@ -173,7 +173,7 @@ namespace Render {
 
 			void string(int x, int y, Color color, const std::string& text, StringFlags_t flags = ALIGN_LEFT);
 			void lua_string(int x, int y, Color color, const std::string& text);
-			//void string( int x, int y, Color color, const std::stringstream& text, StringFlags_t flags = ALIGN_LEFT );
+			void stringstream(int x, int y, Color color, const std::stringstream& text, StringFlags_t flags = ALIGN_LEFT);
 			void wstring(int x, int y, Color color, const std::wstring& text, StringFlags_t flags = ALIGN_LEFT);
 			FontSize_t size(const std::string& text);
 			FontSize_t wsize(const std::wstring& text);
